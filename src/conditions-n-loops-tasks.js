@@ -310,43 +310,60 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  /* const matrix = Array(size).fill().map(() => Array(size).fill(0));
-  let num = 1;
-  let top = 0;
-  let bottom = size - 1;
+function getSpiralMatrix(size) {
+  const matrix = [];
+  for (let i = 0; i < size; i += 1) {
+    matrix[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      matrix[i][j] = 0;
+    }
+  }
+
   let left = 0;
   let right = size - 1;
+  let top = 0;
+  let bottom = size - 1;
+  let num = 1;
 
-  while (top <= bottom && left <= right) {
-    for (let i = left; i <= right; i += 1) {
+  while (left <= right && top <= bottom) {
+    let i = left;
+    while (i <= right) {
       matrix[top][i] = num;
       num += 1;
+      i += 1;
     }
     top += 1;
 
-    for (let i = top; i <= bottom; i += 1) {
+    i = top;
+    while (i <= bottom) {
       matrix[i][right] = num;
       num += 1;
+      i += 1;
     }
     right -= 1;
 
-    for (let i = right; i >= left; i -= 1) {
-      matrix[bottom][i] = num;
-      num += 1;
+    if (top <= bottom) {
+      i = right;
+      while (i >= left) {
+        matrix[bottom][i] = num;
+        num += 1;
+        i -= 1;
+      }
+      bottom -= 1;
     }
-    bottom -= 1;
 
-    for (let i = bottom; i >= top; i -= 1) {
-      matrix[i][left] = num;
-      num += 1;
+    if (left <= right) {
+      i = bottom;
+      while (i >= top) {
+        matrix[i][left] = num;
+        num += 1;
+        i -= 1;
+      }
+      left += 1;
     }
-    left += 1;
   }
 
-  return matrix; */
-
-  throw new Error('Not implemented');
+  return matrix;
 }
 
 /**
@@ -364,8 +381,25 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const rotatedMatrix = matrix;
+  for (let i = 0; i < rotatedMatrix.length; i += 1) {
+    for (let j = i + 1; j < rotatedMatrix.length; j += 1) {
+      [rotatedMatrix[i][j], rotatedMatrix[j][i]] = [
+        rotatedMatrix[j][i],
+        rotatedMatrix[i][j],
+      ];
+    }
+  }
+  for (let i = 0; i < rotatedMatrix.length; i += 1) {
+    for (let j = 0; j < Math.floor(rotatedMatrix.length / 2); j += 1) {
+      [rotatedMatrix[i][j], rotatedMatrix[i][rotatedMatrix.length - j - 1]] = [
+        rotatedMatrix[i][rotatedMatrix.length - j - 1],
+        rotatedMatrix[i][j],
+      ];
+    }
+  }
+  return rotatedMatrix;
 }
 
 /**
@@ -382,10 +416,30 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const newArr = arr;
+  if (arr.length <= 1) {
+    return arr;
+  }
+  const pivotIndex = Math.floor(arr.length / 2);
+  const pivot = arr[pivotIndex];
+  const left = [];
+  const right = [];
+  for (let i = 0; i < arr.length; i += 1) {
+    if (i !== pivotIndex) {
+      if (arr[i] < pivot) {
+        left[left.length] = arr[i];
+      } else {
+        right[right.length] = arr[i];
+      }
+    }
+  }
+  const result = [...sortByAsc(left), pivot, ...sortByAsc(right)];
+  for (let i = 0; i < result.length; i += 1) {
+    newArr[i] = result[i];
+  }
+  return newArr;
 }
-
 /**
  * Shuffles characters in a string so that the characters with an odd index are moved to the end of the string at each iteration.
  * Take into account that the string can be very long and the number of iterations is large. Consider how you can optimize your solution.
